@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LUXE — E-Commerce Store</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="goHome()">LU<span>X</span>E</div>
+    <div class="search-wrap">
+      <span class="si">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search products…" oninput="filterProducts()">
+    </div>
+    <div class="nav-right">
+      <button class="cart-pill" onclick="openCart()">
+        🛍 Cart <span class="badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-search-bar">
+    <input type="text" id="mobileSearch" placeholder="Search products…" oninput="filterProducts(true)">
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="heroSection">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">✦ NEW ARRIVALS 2026</div>
+      <h1>Shop <em>smarter,</em><br>live better.</h1>
+      <p class="hero-sub">Premium products curated for those who demand quality in every detail.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="scrollToProducts()">Shop Now</button>
+        <button class="btn-ghost" onclick="scrollToProducts()">View Lookbook</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hstat-n">12K+</div><div class="hstat-l">Happy customers</div></div>
+        <div><div class="hstat-n">500+</div><div class="hstat-l">Products</div></div>
+        <div><div class="hstat-n">4.9★</div><div class="hstat-l">Avg. rating</div></div>
+      </div>
+    </div>
+    <div class="hero-cards">
+      <div class="hcard">
+        <div class="hcard-em">🎧</div>
+        <div><div class="hcard-label">TRENDING</div><div class="hcard-val">Studio Headphones</div><div class="hcard-price">$299</div></div>
+      </div>
+      <div class="hcard">
+        <div class="hcard-em">⌚</div>
+        <div><div class="hcard-label">NEW</div><div class="hcard-val">Minimal Arc Watch</div><div class="hcard-price">$189</div></div>
+      </div>
+      <div class="hcard">
+        <div class="hcard-em">👟</div>
+        <div><div class="hcard-label">SALE</div><div class="hcard-val">Running Sneakers</div><div class="hcard-price">$135</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRODUCTS ═══ -->
+<div class="main" id="mainSection">
+  <div class="filters">
+    <span class="filters-label">FILTER:</span>
+    <button class="pill active" onclick="setCategory(this,'all')">All</button>
+    <button class="pill" onclick="setCategory(this,'electronics')">Electronics</button>
+    <button class="pill" onclick="setCategory(this,'accessories')">Accessories</button>
+    <button class="pill" onclick="setCategory(this,'home')">Home</button>
+    <button class="pill" onclick="setCategory(this,'fashion')">Fashion</button>
+  </div>
+  <div class="section-hd">
+    <h2>Featured Products <span id="resultsText" style="font-size:13px;color:var(--c5);font-weight:400"></span></h2>
+    <select class="sort-sel" onchange="sortProducts(this.value)">
+      <option value="default">Sort: Featured</option>
+      <option value="price-asc">Price: Low to High</option>
+      <option value="price-desc">Price: High to Low</option>
+      <option value="rating">Top Rated</option>
+    </select>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+  <div class="no-results" id="noResults" style="display:none">
+    <p>No products match your search.</p>
+    <span style="font-size:13px">Try a different keyword or category.</span>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">LU<span style="color:var(--acc)">X</span>E</div>
+      <p>Premium products curated for those who demand quality in every detail.</p>
+    </div>
+    <div class="footer-links">
+      <h4>SHOP</h4>
+      <a href="#">New Arrivals</a>
+      <a href="#">Best Sellers</a>
+      <a href="#">Electronics</a>
+      <a href="#">Fashion</a>
+    </div>
+    <div class="footer-links">
+      <h4>HELP</h4>
+      <a href="#">Shipping Policy</a>
+      <a href="#">Returns</a>
+      <a href="#">Track Order</a>
+      <a href="#">Contact Us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 LUXE. All rights reserved.</span>
+    <span>🔒 Secure Checkout &nbsp;|&nbsp; 🚚 Free Shipping over $100 &nbsp;|&nbsp; ↩️ 30-Day Returns</span>
+  </div>
+</footer>
+
+<!-- ═══ CART SIDEBAR ═══ -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-hd">
+    <div style="display:flex;align-items:center;gap:.6rem">
+      <h3>Your Cart</h3>
+      <span class="count-chip" id="cartChip">0</span>
+    </div>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-summary">
+      <div class="cart-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+      <div class="cart-row"><span>Shipping</span><span id="cartShipping">Free</span></div>
+      <div class="cart-row total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+    <button class="continue-btn" onclick="closeCart()">Continue Shopping</button>
+  </div>
+</div>
+
+<!-- ═══ CHECKOUT PAGE ═══ -->
+<div id="checkout-page">
+  <div class="co-inner">
+    <div class="co-hd">
+      <button class="co-back" onclick="closeCheckout()">← Back to Cart</button>
+      <h2>Checkout</h2>
+    </div>
+    <div class="co-grid">
+      <div>
+        <div class="co-form">
+          <h3>📦 Shipping Information</h3>
+          <div class="form-row">
+            <div class="field"><label>FIRST NAME</label><input type="text" placeholder="Alex"></div>
+            <div class="field"><label>LAST NAME</label><input type="text" placeholder="Johnson"></div>
+          </div>
+          <div class="field form-row full"><label>EMAIL ADDRESS</label><input type="email" placeholder="alex@email.com"></div>
+          <div class="field form-row full"><label>STREET ADDRESS</label><input type="text" placeholder="123 Main Street, Apt 4B"></div>
+          <div class="form-row">
+            <div class="field"><label>CITY</label><input type="text" placeholder="New York"></div>
+            <div class="field"><label>ZIP / POSTAL CODE</label><input type="text" placeholder="10001"></div>
+          </div>
+          <div class="field form-row full">
+            <label>COUNTRY</label>
+            <select>
+              <option>United States</option>
+              <option>United Kingdom</option>
+              <option>Canada</option>
+              <option>Australia</option>
+              <option>India</option>
+              <option>Germany</option>
+              <option>France</option>
+              <option>Japan</option>
+            </select>
+          </div>
+        </div>
+        <div class="co-form">
+          <h3>💳 Payment Details</h3>
+          <div class="payment-icons">
+            <div class="pay-icon active" onclick="selectPay(this)">💳 Credit Card</div>
+            <div class="pay-icon" onclick="selectPay(this)">🅿️ PayPal</div>
+            <div class="pay-icon" onclick="selectPay(this)">🍎 Apple Pay</div>
+            <div class="pay-icon" onclick="selectPay(this)">G Pay</div>
+            </div>
+            <div class="form-row">
+            <div class="field"><label>CARD NUMBER</label><input type="text" id="cardNum" placeholder="4242 4242 4242 4242" maxlength="19" oninput="fmtCard(this)"></div>
+            <div class="field"><label>EXPIRY DATE</label><input type="text" id="cardExp" placeholder="MM / YY" maxlength="7" oninput="fmtExpiry(this)"></div>
+            </div>
+            <div class="form-row">
+            <div class="field"><label>CARDHOLDER NAME</label><input type="text" placeholder="Alex Johnson"></div>
+            <div class="field"><label>CVV</label><input type="text" placeholder="123" maxlength="3"></div>
+            </div>
+          <button class="place-btn" onclick="placeOrder()">🔒 Place Order Securely</button>
+        </div>
+      </div>
+      <div>
+        <div class="co-summary">
+          <h3>Order Summary</h3>
+          <div id="coItems"></div>
+          <div class="co-divider"></div>
+          <div class="co-row"><span>Subtotal</span><span id="coSub">$0.00</span></div>
+          <div class="co-row"><span>Shipping</span><span style="color:var(--grn);font-weight:600">Free</span></div>
+          <div class="co-row"><span>Tax (8%)</span><span id="coTax">$0.00</span></div>
+          <div class="co-divider"></div>
+          <div class="co-row total"><span>Total</span><span id="coTotal">$0.00</span></div>
+          <div class="trust-row">
+          <div class="trust-item">🔒 SSL Secure</div>
+          <div class="trust-item">🚚 Free Shipping</div>
+          <div class="trust-item">↩️ 30-day returns</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SUCCESS PAGE ═══ -->
+<div id="success-page">
+  <div class="success-icon">✅</div>
+  <h2 style="font-size:1.8rem;font-weight:800">Order Placed!</h2>
+  <p style="color:var(--c5);max-width:360px;line-height:1.6;margin-top:.25rem">Thank you for shopping with LUXE. Your order is confirmed and will ship within 2–3 business days.</p>
+  <p style="font-size:13px;color:var(--c6);margin-top:.25rem">Order #LX-<span id="orderNum"></span></p>
+  <button class="btn-primary" style="margin-top:1.25rem" onclick="backToShop()">← Continue Shopping</button>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
